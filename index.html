@@ -4,32 +4,36 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mirema Landing Page Reveal Animation | Craft.Studio</title>
-    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="style.css">
+    
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/Flip.min.js"></script>
+    <script src="https://unpkg.com/split-type"></script>
 </head>
 <body>
     <section class="hero">
         <div class="hero-bg"></div>
         <div class="counter">
-            <div class="counter-1 digit"></div>
-            <div class="counter-2 digit"></div>
-            <div class="counter-3 digit"></div>
+            <div class="counter-1 digit"><div class="num">0</div></div>
+            <div class="counter-2 digit"><div class="num">0</div></div>
+            <div class="counter-3 digit"><div class="num">0</div></div>
         </div>
         <div class="images-container">
-            <div class="img"><img src="/image/img01.jpg" alt="" /></div>
-            <div class="img"><img src="/image/img01.jpg" alt="" /></div>
-            <div class="img"><img src="/image/img01.jpg" alt="" /></div>
-            <div class="img"><img src="/image/img01.jpg" alt="" /></div>
-            <div class="img"><img src="/image/img01.jpg" alt="" /></div>
-            <div class="img"><img src="/image/img01.jpg" alt="" /></div>
-            <div class="img"><img src="/image/img01.jpg" alt="" /></div>
-            <div class="img"><img src="/image/img01.jpg" alt="" /></div>
-            <div class="img"><img src="/image/img01.jpg" alt="" /></div>
-            <div class="img"><img src="/image/img01.jpg" alt="" /></div>
-            <div class="img"><img src="/image/img01.jpg" alt="" /></div>
-            <div class="img"><img src="/image/img01.jpg" alt="" /></div>
-            <div class="img"><img src="/image/img01.jpg" alt="" /></div>
-            <div class="img"><img src="/image/img01.jpg" alt="" /></div>
-            <div class="img"><img src="/image/img01.jpg" alt="" /></div>
+            <div class="img"><img src="image/img01.jpg" alt="" /></div>
+            <div class="img"><img src="image/img01.jpg" alt="" /></div>
+            <div class="img"><img src="image/img01.jpg" alt="" /></div>
+            <div class="img"><img src="image/img01.jpg" alt="" /></div>
+            <div class="img"><img src="image/img01.jpg" alt="" /></div>
+            <div class="img"><img src="image/img01.jpg" alt="" /></div>
+            <div class="img"><img src="image/img01.jpg" alt="" /></div>
+            <div class="img"><img src="image/img01.jpg" alt="" /></div>
+            <div class="img"><img src="image/img01.jpg" alt="" /></div>
+            <div class="img"><img src="image/img01.jpg" alt="" /></div>
+            <div class="img"><img src="image/img01.jpg" alt="" /></div>
+            <div class="img"><img src="image/img01.jpg" alt="" /></div>
+            <div class="img"><img src="image/img01.jpg" alt="" /></div>
+            <div class="img"><img src="image/img01.jpg" alt="" /></div>
+            <div class="img"><img src="image/img01.jpg" alt="" /></div>
         </div>
         <nav>
             <div class="logo-name">
@@ -44,7 +48,11 @@
                 </div>
 
                 <div class="cta">
-                    <a href="">Contact Me</a>
+                    <a href="#" id="wishlist-btn">Join Wishlist
+                        <svg class="arrow" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 4L12 20M12 20L18 14M12 20L6 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </a>
                 </div>
             </div>
             <div class="divider"></div>
@@ -52,7 +60,7 @@
 
         <div class="sidebar">
             <div class="logo">
-                <img src="/image/logo_dark.png" alt="">
+                <img src="image/logo_dark.png" alt="">
             </div>
 
             <div class="divider"></div>
@@ -76,6 +84,20 @@
         </div>
 
     </section>
-    <script type="module" src="/script.js"></script>
+    
+    <!-- Wishlist Modal -->
+    <div class="wishlist-modal" id="wishlist-modal">
+        <div class="wishlist-content">
+            <button class="close-modal" id="close-modal">&times;</button>
+            <h2>Join Wishlist</h2>
+            <p>Be the first to know when we launch! Enter your email to get early access and exclusive updates.</p>
+            <form class="wishlist-form" id="wishlist-form">
+                <input type="email" placeholder="Enter your email address" required>
+                <button type="submit">Join Wishlist</button>
+            </form>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
 </body>
 </html>

@@ -73,11 +73,34 @@ a, p {
     font-size: 120px;
     line-height: 150px;
     clip-path: polygon(0 0, 100% 0, 100% 120px, 0 120px);
+    z-index: 1000;
+    color: var(--fg);
+    font-weight: bold;
+    background: rgba(241, 239, 231, 0.9);
+    padding: 0 1rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    opacity: 1;
 }
 
 .digit {
     position: relative;
     top: -15px;
+    overflow: hidden;
+    height: 120px;
+    width: 80px;
+    margin: 0 0.5rem;
+}
+
+.num {
+    position: relative;
+    top: 0;
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    color: var(--fg);
 }
 
 .numioffset1 {
@@ -106,6 +129,7 @@ a, p {
     aspect-ratio: 5/3;
     border-radius: 0.75rem;
     overflow: hidden;
+    transform: scale(0);
 }
 
 .images-container .img.animate-out {
@@ -174,6 +198,12 @@ nav .divider {
     transform: scale(0);
 }
 
+.sidebar .logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
 .sidebar .divider {
     position: absolute;
     right: 0;
@@ -233,6 +263,28 @@ nav .divider {
     will-change: transform;
 }
 
+.header h1 .line {
+    transform: translateY(100%);
+    opacity: 0;
+}
+
+.site-info h2 .line,
+.site-info p .line {
+    transform: translateY(100%);
+    opacity: 0;
+}
+
+.hero-footer h2 .line {
+    transform: translateY(100%);
+    opacity: 0;
+}
+
+nav a .line,
+nav p .line {
+    transform: translateY(100%);
+    opacity: 0;
+}
+
 @media (max-width: 1000px) {
 
     h1 {
@@ -262,6 +314,154 @@ nav .divider {
         right: unset;
         left: 7.5rem;
     }  
+}
+
+.cta {
+    display: flex;
+    align-items: center;
+}
+
+.cta a {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: var(--fg);
+    color: var(--bg);
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.cta a:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.cta a .arrow {
+    width: 16px;
+    height: 16px;
+    transition: transform 0.3s ease;
+    transform: rotate(180deg); /* Start pointing straight down */
+}
+
+.cta a:hover .arrow {
+    transform: translateY(-2px) rotate(180deg);
+}
+
+/* Arrow state when animation is settled */
+.cta a.animation-settled .arrow {
+    transform: rotate(-135deg); /* Point southwest */
+}
+
+.cta a.animation-settled:hover .arrow {
+    transform: translateY(-2px) rotate(-135deg);
+}
+
+/* Wishlist Modal Styles */
+.wishlist-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.wishlist-modal.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.wishlist-content {
+    background-color: var(--bg);
+    padding: 3rem;
+    border-radius: 1rem;
+    text-align: center;
+    max-width: 400px;
+    transform: scale(0.8);
+    transition: transform 0.3s ease;
+}
+
+.wishlist-modal.active .wishlist-content {
+    transform: scale(1);
+}
+
+.wishlist-content h2 {
+    margin-bottom: 1rem;
+    font-size: 2rem;
+}
+
+.wishlist-content p {
+    margin-bottom: 2rem;
+    color: #666;
+    line-height: 1.6;
+}
+
+.wishlist-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.wishlist-form input {
+    padding: 1rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+}
+
+.wishlist-form input:focus {
+    outline: none;
+    border-color: var(--fg);
+}
+
+.wishlist-form button {
+    background-color: var(--fg);
+    color: var(--bg);
+    padding: 1rem;
+    border: none;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.wishlist-form button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.close-modal {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    font-size: 2rem;
+    cursor: pointer;
+    color: var(--fg);
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background-color 0.3s ease;
+}
+
+.close-modal:hover {
+    background-color: rgba(0, 0, 0, 0.1);
 }
 
 

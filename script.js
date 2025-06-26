@@ -1,141 +1,133 @@
-import { gsap } from "gsap";
-    
-import { Flip } from "gsap/Flip";
-import { SplitText } from "gsap/SplitText";
-import { TextPlugin } from "gsap/TextPlugin";
+document.addEventListener("DOMContentLoaded", (event) => {
+    // GSAP plugins are still registered as usual
+    gsap.registerPlugin(Flip); // SplitType doesn't need to be registered with GSAP
 
-gsap.registerPlugin(Flip,SplitText,TextPlugin);
+    let splitTextInstances = []; // To store SplitType instances for cleanup if needed
 
+    const setupTextSplitting = () => {
+        // Clear previous instances if this function is called multiple times
+        splitTextInstances.forEach(instance => instance.revert());
+        splitTextInstances = [];
 
-const setupTextSplitting = () => {
-    const textElements = document.querySelectorAll("h1, h2, p, a");
-    textElements.forEach((element) => {
-        SplitText.create(element, {
-            type: "lines",
-            linesClass: "line",
+        const textElements = document.querySelectorAll("h1, h2, p, a:not(#wishlist-btn)");
+        textElements.forEach((element) => {
+            // Use SplitType to create the split elements
+            const splitInstance = new SplitType(element, {
+                type: "lines",
+                lineClass: "line",
+            });
+            splitTextInstances.push(splitInstance);
+        });
+    };
+
+    const createCounterDigits = () => {
+        // Create a simple counter display
+        const counter1 = document.querySelector(".counter-1 .num");
+        const counter2 = document.querySelector(".counter-2 .num");
+        const counter3 = document.querySelector(".counter-3 .num");
+        
+        if (counter1) {
+            counter1.textContent = '0';
+        }
+        if (counter2) {
+            counter2.textContent = '0';
+        }
+        if (counter3) {
+            counter3.textContent = '0';
+        }
+    };
+
+    const animateCounter = (duration) => {
+        let currentNumber = 0;
+        const targetNumber = 100;
+        const counter1 = document.querySelector(".counter-1 .num");
+        const counter2 = document.querySelector(".counter-2 .num");
+        const counter3 = document.querySelector(".counter-3 .num");
+        
+        const interval = duration * 1000 / targetNumber; // Convert to milliseconds
+        
+        // Add a small delay before starting
+        setTimeout(() => {
+            const timer = setInterval(() => {
+                currentNumber++;
+                
+                if (currentNumber > targetNumber) {
+                    clearInterval(timer);
+                    return;
+                }
+                
+                // Update the display
+                const hundreds = Math.floor(currentNumber / 100);
+                const tens = Math.floor((currentNumber % 100) / 10);
+                const ones = currentNumber % 10;
+                
+                if (counter1) counter1.textContent = hundreds;
+                if (counter2) counter2.textContent = tens;
+                if (counter3) counter3.textContent = ones;
+                
+            }, interval);
+        }, 500); // 500ms delay before starting
+    };
+
+    function animateImages() {
+        const images = document.querySelectorAll(".img");
+
+        images.forEach((img) => {
+            img.classList.remove("animate-out");
         });
 
-        const lines = element.querySelectorAll(".line");
-        lines.forEach((line) => {
-            const textContent = line.textContent;
-            line.innerHTML = `<span>${textContent}</span>`;
+        const state = Flip.getState(images);
+
+        images.forEach((img) => img.classList.add("animate-out"));
+
+        const mainTimeline = gsap.timeline();
+
+        mainTimeline.add(
+            Flip.from(state, {
+                duration: 1,
+                stagger: 0.1,
+                ease: "power3.inOut",
+            })
+        );
+
+        images.forEach((img, index) => {
+            const scaleTimeline = gsap.timeline();
+
+            scaleTimeline
+                .to(
+                    img,
+                    {
+                        scale: 2.5,
+                        duration: 0.45,
+                        ease: "power3.in",
+                    },
+                    0.025
+                )
+                .to(
+                    img,
+                    {
+                        scale: 1,
+                        duration: 0.45,
+                        ease: "power3.out",
+                    },
+                    0.5
+                );
+
+            mainTimeline.add(scaleTimeline, index * 0.1);
         });
-    });
-};
 
-const createCounterDigits = () => {
-    const counter1 = document.querySelector(".counter-1");
-    if (counter1) {
-        const num0 = document.createElement("div");
-        num0.className = "num";
-        num0.textContent = "0";
-        counter1.appendChild(num0);
-
-        const num1 = document.createElement("div");
-        num1.className = "num num1offset1";
-        num1.textContent = "1";
-        counter1.appendChild(num1);
+        return mainTimeline;
     }
 
-    const counter2 = document.querySelector(".counter-2");
-    if (counter2) {
-        for (let i = 0; i < 10; i++) {
-            const numDiv = document.createElement("div");
-            numDiv.className = i === 1 ? "num1offset2" : "num";
-            numDiv.textContent = i;
-            counter2.appendChild(numDiv);
-        }
-    }
-
-    const counter3 = document.querySelector(".counter-3");
-    if (counter3) {
-        for (let i = 0; i < 30; i++) {
-            const numDiv = document.createElement("div");
-            numDiv.className = "num";
-            numDiv.textContent = i % 10;
-            counter3.appendChild(numDiv);
-        }
-        const finalNum = document.createElement("div");
-        finalNum.className = "num";
-        finalNum.textContent = "0";
-        counter3.appendChild(finalNum);
-    }
-};
-
-const animateCounter = (counter, duration, delay = 0) => {
-    if (!counter) return;
-    const num = counter.querySelector(".num");
-    if (!num) return;
-    const numHeight = num.clientHeight;
-    const totalDistance = (counter.querySelectorAll(".num").length - 1) * numHeight;
-    gsap.to(counter, {
-        y: -totalDistance,
-        duration: duration,
-        delay: delay,
-        ease: "power2.inOut",
-    });
-};
-
-function animateImages() {
-    const images = document.querySelectorAll(".img");
-
-    images.forEach((img) => {
-        img.classList.remove("animate-out");
-    });
-
-    const state = Flip.getState(images);
-
-    images.forEach((img) => img.classList.add("animate-out"));
-
-    const mainTimeline = gsap.timeline();
-
-    mainTimeline.add(
-        Flip.from(state, {
-            duration: 1,
-            stagger: 0.1,
-            ease: "power3.inOut",
-        })
-    );
-
-    images.forEach((img, index) => {
-        const scaleTimeline = gsap.timeline();
-
-        scaleTimeline
-            .to(
-                img,
-                {
-                    scale: 2.5,
-                    duration: 0.45,
-                    ease: "power3.in",
-                },
-                0.025
-            )
-            .to(
-                img,
-                {
-                    scale: 1,
-                    duration: 0.45,
-                    ease: "power3.out",
-                },
-                0.5
-            );
-
-        mainTimeline.add(scaleTimeline, index * 0.1);
-    });
-
-    return mainTimeline;
-}
-
-document.addEventListener("DOMContentLoaded", () => {
+    // Initialize everything
     setupTextSplitting();
     createCounterDigits();
 
-    animateCounter(document.querySelector(".counter-3"), 2.5);
-    animateCounter(document.querySelector(".counter-2"), 3);
-    animateCounter(document.querySelector(".counter-1"), 2, 1.5);
+    // Start counter animation to count from 1 to 100
+    animateCounter(1);
 
+    // Main animation timeline
     const t1 = gsap.timeline();
-    gsap.set(".img", { scale: 0 });
 
     t1.to(".hero-bg", {
         scaleY: "100%",
@@ -157,9 +149,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     t1.to(".counter", {
         opacity: 0,
-        duration: 0.3,
+        duration: 0.5,
         ease: "power3.out",
-        delay: 0.3,
+        delay: 1.5, // Increased delay so counter is visible longer
         onStart: () => {
             animateImages();
         },
@@ -193,12 +185,19 @@ document.addEventListener("DOMContentLoaded", () => {
         "<"
     );
 
+    // Animate text elements
     t1.to(
-        [".logo-name a span", ".links a span, .links p span", ".cta a span"],
+        [
+            ".logo-name a .line",
+            ".links a .line",
+            ".links p .line",
+            ".cta a .line"
+        ],
         {
             y: "0%",
-            scale: 1,
-            duration: 0.1,
+            opacity: 1,
+            duration: 0.8,
+            stagger: 0.05,
             ease: "power4.Out",
             delay: 0.5,
         },
@@ -206,13 +205,78 @@ document.addEventListener("DOMContentLoaded", () => {
     );
 
     t1.to(
-        [".header span", ".site-info span", ".hero-footer span"],
+        [
+            ".header .line",
+            ".site-info .line",
+            ".hero-footer .line"
+        ],
         {
             y: "0%",
-            duration: 0.1,
+            opacity: 1,
+            duration: 0.8,
+            stagger: 0.05,
             ease: "power4.Out",
             delay: 0.5,
         },
         "<"
     );
+
+    // Add animation-settled class when animation completes
+    t1.call(() => {
+        const wishlistBtn = document.getElementById('wishlist-btn');
+        if (wishlistBtn) {
+            wishlistBtn.classList.add('animation-settled');
+        }
+    });
 });
+
+// Wishlist Modal Functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const wishlistBtn = document.getElementById('wishlist-btn');
+    const wishlistModal = document.getElementById('wishlist-modal');
+    const closeModal = document.getElementById('close-modal');
+    const wishlistForm = document.getElementById('wishlist-form');
+
+    // Open modal
+    wishlistBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        wishlistModal.classList.add('active');
+        document.body.style.overflow = 'hidden'; // Prevent background scrolling
+    });
+
+    // Close modal
+    closeModal.addEventListener('click', function() {
+        wishlistModal.classList.remove('active');
+        document.body.style.overflow = 'auto';
+    });
+
+    // Close modal when clicking outside
+    wishlistModal.addEventListener('click', function(e) {
+        if (e.target === wishlistModal) {
+            wishlistModal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+    });
+
+    // Handle form submission
+    wishlistForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const email = wishlistForm.querySelector('input[type="email"]').value;
+        
+        // Here you would typically send the email to your backend
+        // For now, we'll just show a success message
+        const content = wishlistModal.querySelector('.wishlist-content');
+        content.innerHTML = `
+            <button class="close-modal" id="close-modal">&times;</button>
+            <h2>Thank You!</h2>
+            <p>You've been added to our wishlist. We'll notify you as soon as we launch!</p>
+            <button class="wishlist-form button" onclick="location.reload()">Close</button>
+        `;
+        
+        // Re-attach close functionality
+        document.getElementById('close-modal').addEventListener('click', function() {
+            wishlistModal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        });
+    });
+}); 
