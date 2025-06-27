@@ -692,3 +692,27 @@ nav p .line {
 .loading .counter {
     opacity: 0.5;
 } 
+/* Custom styles for the newsletter close button */
+.newsletter-close-btn {
+  margin-top: 1.5rem; /* mt-6 */
+  width: 100%; /* w-full */
+  padding: 0.75rem 1.5rem; /* px-6 py-3 */
+  background-color: #212224; /* bg-gray-700 */
+  color: #ffffff; /* text-white */
+  font-weight: 600; /* font-semibold */
+  border-radius: 0.5rem; /* rounded-lg */
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* shadow-md */
+  transition: background-color 0.3s ease-in-out, transform 0.3s ease-in-out; /* transition duration-300 ease-in-out */
+  border: none; /* Remove default button border */
+  cursor: pointer; /* Indicate it's clickable */
+}
+
+.newsletter-close-btn:hover {
+  background-color: #18191a; /* hover:bg-gray-800 */
+  transform: scale(1.05); /* hover:scale-105 */
+}
+
+.newsletter-close-btn:focus {
+  outline: none; /* focus:outline-none */
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.5); /* focus:ring-2 focus:ring-gray-500 focus:ring-opacity-75 (approximate) */
+}
